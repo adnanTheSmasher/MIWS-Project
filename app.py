@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 import subprocess
+import webbrowser
 import sys
 import os
 
@@ -31,5 +32,6 @@ def launch_canvas():
         return jsonify({'status': 'error', 'message': str(e)}), 500
     
 if __name__ == "__main__":
-    app.run(debug=True, port=5500)
+    webbrowser.open("http://127.0.0.1:5500/")
+    app.run(debug=False, port=5500, use_reloader=False)
 
