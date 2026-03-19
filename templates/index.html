@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediaPipe Interactive Web Suite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+  <!-- Ambient blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">MIWS <span>/ Suite</span></div>
+    <div class="nav-tag">AI Course Project</div>
+  </nav>
+
+  <div class="wrapper">
+
+    <!-- HERO -->
+    <section class="hero">
+      <p class="hero-eyebrow">MediaPipe · Flask · Hand Gesture AI</p>
+      <h1 class="hero-title">
+        MediaPipe<br>
+        <span class="line2">Interactive</span><br>
+        Web Suite
+      </h1>
+      <p class="hero-desc">
+        A real-time hand gesture web application powered by MediaPipe.
+        Draw in the air, control a game, or answer a quiz — all through
+        your webcam, no hardware required.
+      </p>
+      <a href="#modes" class="hero-cta">
+        Explore Modes
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1v12M1 7l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3</div>
+          <div class="stat-label">Interactive Modes</div>
+        </div>
+        <div>
+          <div class="stat-num">21</div>
+          <div class="stat-label">Hand Landmarks</div>
+        </div>
+        <div>
+          <div class="stat-num">0</div>
+          <div class="stat-label">Paid APIs Used</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Possibilities</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODES -->
+    <section id="modes">
+      <div class="section-header reveal">
+        <p class="section-label">Select a Mode</p>
+        <h2 class="section-title">What do you want to do?</h2>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- Card 1: Air Canvas -->
+        <a href="#" onclick="launchCanvas(event)" class="card card-canvas">
+          <div class="card-number">01</div>
+          <span class="card-icon">🖐️</span>
+          <h3 class="card-title">Air Canvas</h3>
+          <p class="card-desc">Draw freely on a digital canvas using just your index finger. No mouse, no stylus — pure gesture-driven creativity.</p>
+          <div class="card-tags">
+            <span class="tag">Hand Tracking</span>
+            <span class="tag">HTML Canvas</span>
+            <span class="tag">Real-time</span>
+          </div>
+          <div class="card-arrow">
+            Launch
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </a>
+
+        <!-- Card 2: Gesture Game -->
+        <a href="/game" class="card card-game">
+          <div class="card-number">02</div>
+          <span class="card-icon">🎮</span>
+          <h3 class="card-title">Gesture Game</h3>
+          <p class="card-desc">Control a Snake game with your hand. Tilt left, right, up, or down — no keyboard needed. Pause with a fist.</p>
+          <div class="card-tags">
+            <span class="tag">Gesture Control</span>
+            <span class="tag">Snake Game</span>
+            <span class="tag">BFS Pathfinding</span>
+          </div>
+          <div class="card-arrow">
+            Play
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </a>
+
+        <!-- Card 3: Gesture Quiz -->
+        <a href="/quiz" class="card card-quiz">
+          <div class="card-number">03</div>
+          <span class="card-icon">🃏</span>
+          <h3 class="card-title">Gesture Quiz</h3>
+          <p class="card-desc">Answer multiple-choice questions by raising fingers. 1 = A, 2 = B, 3 = C, 4 = D. Your hand is your keyboard.</p>
+          <div class="card-tags">
+            <span class="tag">Finger Count</span>
+            <span class="tag">MCQ Quiz</span>
+            <span class="tag">Live Scoring</span>
+          </div>
+          <div class="card-arrow">
+            Start Quiz
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="reveal">
+      <div class="footer-logo">MIWS / 2025</div>
+      <div class="footer-note">AI Course Project · MediaPipe + Flask · No paid APIs</div>
+    </footer>
+
+  </div><!-- /wrapper -->
+
+<script src="../static/script.js"></script>
+</body>
+</html>
