@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gesture Quiz · MIWS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/css/quiz.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back
+    </a>
+    <div class="nav-title">🃏 Gesture Quiz</div>
+    <div class="nav-detection">
+      <span class="det-dot" id="detDot"></span>
+      <span id="detText">Waiting for hand...</span>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- TOP: Progress + Score -->
+    <div class="top-bar">
+      <div class="score-block">
+        <div class="score-label">Question</div>
+        <div class="score-value" id="questionNum">1 / 10</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="score-block right">
+        <div class="score-label">Score</div>
+        <div class="score-value" id="scoreVal">0</div>
+      </div>
+    </div>
+
+    <!-- QUESTION CARD -->
+    <div class="question-card">
+      <div class="q-category" id="qCategory">Loading...</div>
+      <div class="q-text" id="qText">Please wait...</div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="options-grid">
+      <div class="option" id="opt0">
+        <span class="opt-letter">A</span>
+        <span class="opt-text" id="optText0">—</span>
+      </div>
+      <div class="option" id="opt1">
+        <span class="opt-letter">B</span>
+        <span class="opt-text" id="optText1">—</span>
+      </div>
+      <div class="option" id="opt2">
+        <span class="opt-letter">C</span>
+        <span class="opt-text" id="optText2">—</span>
+      </div>
+      <div class="option" id="opt3">
+        <span class="opt-letter">D</span>
+        <span class="opt-text" id="optText3">—</span>
+      </div>
+    </div>
+
+    <!-- GESTURE HINT BAR -->
+    <div class="hint-bar">
+      <div class="hint" id="h1">☝️ <b>1</b> = A</div>
+      <div class="hint" id="h2">✌️ <b>2</b> = B</div>
+      <div class="hint" id="h3">🤟 <b>3</b> = C</div>
+      <div class="hint" id="h4">🖐️ <b>4</b> = D</div>
+      <div class="hint fist" id="h0">✊ <b>Fist</b> = Confirm</div>
+    </div>
+
+    <!-- STATUS MESSAGE -->
+    <div class="status-bar" id="statusBar">
+      <span id="statusMsg">Show fingers to select an answer, then make a fist to confirm.</span>
+    </div>
+
+  </main>
+
+  <!-- RESULT OVERLAY -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-card">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <h2 class="result-title" id="resultTitle">Quiz Complete!</h2>
+      <div class="result-score-row">
+        <span class="result-big" id="finalScore">0</span>
+        <span class="result-total" id="finalTotal">/ 10</span>
+      </div>
+      <p class="result-msg" id="resultMsg">Great job!</p>
+      <div class="result-btns">
+        <button class="rbtn primary" onclick="restartQuiz()">Play Again</button>
+        <a href="/" class="rbtn secondary">Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../static/scripts/quiz.js"></script>
+</body>
+</html>
