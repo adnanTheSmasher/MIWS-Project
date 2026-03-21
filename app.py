@@ -5,13 +5,11 @@ import os
 import random
 import quizGame
 import webbrowser
-# FIX 1: Do NOT import AI_VirtualPainter — importing it runs the painter immediately!
-# The painter is launched as a subprocess instead.
 
 app = Flask(__name__)
 
 # ═══════════════════════════════════════════
-#   Air Canvas — subprocess launcher
+#   Air Canvas — ye sirf cv2 ki window ko show karega nothing else as a subprocess in the background
 # ═══════════════════════════════════════════
 painter_process = None
 
@@ -32,10 +30,9 @@ def launch_canvas():
 @app.route('/canvas/stop')
 def stop_canvas():
     global painter_process
-    # FIX 2: terminate() kills the subprocess and its cv2 window properly
     if painter_process and painter_process.poll() is None:
         painter_process.terminate()
-        painter_process.wait()   # wait for it to fully close
+        painter_process.wait()
         painter_process = None
     return jsonify({'status': 'stopped'})
 
@@ -131,7 +128,6 @@ def restart_quiz():
 
 @app.route('/quiz/stop')
 def stop_quiz():
-    # FIX 3: This properly stops camera so it's free after leaving quiz page
     quizGame.stop()
     return jsonify({'status': 'stopped'})
 
