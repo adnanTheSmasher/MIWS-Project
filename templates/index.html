@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MediaPipe Interactive Web Suite</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../static/css/index.css">
+  <link rel="stylesheet" href="/static/css/index.css">
 </head>
 <body>
 
-  <!-- Ambient blobs -->
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-logo">MIWS <span>/ Suite</span></div>
     <div class="nav-tag">AI Course Project</div>
@@ -22,7 +20,6 @@
 
   <div class="wrapper">
 
-    <!-- HERO -->
     <section class="hero">
       <p class="hero-eyebrow">MediaPipe · Flask · Hand Gesture AI</p>
       <h1 class="hero-title">
@@ -43,26 +40,13 @@
       </a>
 
       <div class="hero-stats">
-        <div>
-          <div class="stat-num">3</div>
-          <div class="stat-label">Interactive Modes</div>
-        </div>
-        <div>
-          <div class="stat-num">21</div>
-          <div class="stat-label">Hand Landmarks</div>
-        </div>
-        <div>
-          <div class="stat-num">0</div>
-          <div class="stat-label">Paid APIs Used</div>
-        </div>
-        <div>
-          <div class="stat-num">∞</div>
-          <div class="stat-label">Possibilities</div>
-        </div>
+        <div><div class="stat-num">3</div><div class="stat-label">Interactive Modes</div></div>
+        <div><div class="stat-num">21</div><div class="stat-label">Hand Landmarks</div></div>
+        <div><div class="stat-num">0</div><div class="stat-label">Paid APIs Used</div></div>
+        <div><div class="stat-num">∞</div><div class="stat-label">Possibilities</div></div>
       </div>
     </section>
 
-    <!-- MODES -->
     <section id="modes">
       <div class="section-header reveal">
         <p class="section-label">Select a Mode</p>
@@ -71,7 +55,7 @@
 
       <div class="cards-grid">
 
-        <!-- Card 1: Air Canvas -->
+        <!-- Card 1: Air Canvas — directly launches painter, no separate page -->
         <a href="#" onclick="launchCanvas(event)" class="card card-canvas">
           <div class="card-number">01</div>
           <span class="card-icon">🖐️</span>
@@ -131,14 +115,13 @@
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="reveal">
       <div class="footer-logo">MIWS / 2025</div>
       <div class="footer-note">AI Course Project · MediaPipe + Flask · No paid APIs</div>
     </footer>
 
-  </div><!-- /wrapper -->
+  </div>
 
-<script src="../static/scripts/index.js"></script>
+  <script src="/static/scripts/index.js"></script>
 </body>
 </html>

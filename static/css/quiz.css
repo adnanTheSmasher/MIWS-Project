@@ -205,3 +205,44 @@ main {
   .options-grid { grid-template-columns: 1fr; }
   html, body { overflow: auto; }
 }
+
+/* ── HOLD PROGRESS BAR (appended) ── */
+.option {
+  flex-direction: column;
+  gap: 8px;
+}
+.option-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+.hold-bar-wrap {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.hold-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 100px;
+  transition: width 0.1s linear;
+}
+.option.holding {
+  border-color: var(--accent);
+  background: rgba(245,230,216,0.05);
+}
+.option.holding .opt-letter {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(245,230,216,0.12);
+}
+.option.holding .opt-text { color: var(--text); }
+.hint.holding {
+  color: var(--accent);
+  border-color: rgba(245,230,216,0.3);
+  background: rgba(245,230,216,0.06);
+}

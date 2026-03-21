@@ -29,3 +29,13 @@ function launchCanvas() {
       launchBtn.disabled = false;
     });
 }
+
+function stopCanvas() {
+  fetch('/canvas/stop')
+    .then(() => {
+      window.location.href = '/';  // go back to home page
+    })
+    .catch(() => {
+      window.location.href = '/';  // fallback
+    });
+}

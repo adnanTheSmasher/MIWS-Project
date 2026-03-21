@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gesture Quiz · MIWS</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../static/css/quiz.css" />
+  <!-- FIX 6: /static/css/ not ../static/css/ -->
+  <link rel="stylesheet" href="/static/css/quiz.css" />
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
-    <a href="/" class="nav-back">
+    <a href="#" class="nav-back" onclick="stopAndGoHome()">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
         <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -26,7 +26,6 @@
 
   <main>
 
-    <!-- TOP: Progress + Score -->
     <div class="top-bar">
       <div class="score-block">
         <div class="score-label">Question</div>
@@ -41,49 +40,48 @@
       </div>
     </div>
 
-    <!-- QUESTION CARD -->
     <div class="question-card">
       <div class="q-category" id="qCategory">Loading...</div>
       <div class="q-text" id="qText">Please wait...</div>
     </div>
 
-    <!-- OPTIONS -->
     <div class="options-grid">
       <div class="option" id="opt0">
-        <span class="opt-letter">A</span>
-        <span class="opt-text" id="optText0">—</span>
+        <div class="option-top"><span class="opt-letter">A</span><span class="opt-text" id="optText0">—</span></div>
+        <div class="hold-bar-wrap"><div class="hold-bar-fill" id="ring0"></div></div>
       </div>
       <div class="option" id="opt1">
-        <span class="opt-letter">B</span>
-        <span class="opt-text" id="optText1">—</span>
+        <div class="option-top"><span class="opt-letter">B</span><span class="opt-text" id="optText1">—</span></div>
+        <div class="hold-bar-wrap"><div class="hold-bar-fill" id="ring1"></div></div>
       </div>
       <div class="option" id="opt2">
-        <span class="opt-letter">C</span>
-        <span class="opt-text" id="optText2">—</span>
+        <div class="option-top"><span class="opt-letter">C</span><span class="opt-text" id="optText2">—</span></div>
+        <div class="hold-bar-wrap"><div class="hold-bar-fill" id="ring2"></div></div>
       </div>
       <div class="option" id="opt3">
-        <span class="opt-letter">D</span>
-        <span class="opt-text" id="optText3">—</span>
+        <div class="option-top"><span class="opt-letter">D</span><span class="opt-text" id="optText3">—</span></div>
+        <div class="hold-bar-wrap"><div class="hold-bar-fill" id="ring3"></div></div>
       </div>
     </div>
 
-    <!-- GESTURE HINT BAR -->
     <div class="hint-bar">
       <div class="hint" id="h1">☝️ <b>1</b> = A</div>
       <div class="hint" id="h2">✌️ <b>2</b> = B</div>
       <div class="hint" id="h3">🤟 <b>3</b> = C</div>
       <div class="hint" id="h4">🖐️ <b>4</b> = D</div>
-      <div class="hint fist" id="h0">✊ <b>Fist</b> = Confirm</div>
     </div>
 
-    <!-- STATUS MESSAGE -->
     <div class="status-bar" id="statusBar">
-      <span id="statusMsg">Show fingers to select an answer, then make a fist to confirm.</span>
+      <span id="statusMsg">Hold a finger for 1.5s to confirm your answer.</span>
+    </div>
+
+    <div style="text-align:center; margin-top: 8px;">
+      <!-- FIX 3: Stop Quiz calls /quiz/stop before navigating -->
+      <button onclick="stopQuiz()" class="rbtn secondary">Stop Quiz</button>
     </div>
 
   </main>
 
-  <!-- RESULT OVERLAY -->
   <div class="result-overlay" id="resultOverlay">
     <div class="result-card">
       <div class="result-emoji" id="resultEmoji">🎉</div>
@@ -95,11 +93,13 @@
       <p class="result-msg" id="resultMsg">Great job!</p>
       <div class="result-btns">
         <button class="rbtn primary" onclick="restartQuiz()">Play Again</button>
-        <a href="/" class="rbtn secondary">Home</a>
+        <!-- FIX 3: Home button also stops camera -->
+        <button class="rbtn secondary" onclick="stopQuiz()">Home</button>
       </div>
     </div>
   </div>
 
-  <script src="../static/scripts/quiz.js"></script>
+  <!-- FIX 7: correct script path /static/js/ -->
+  <script src="/static/scripts/quiz.js"></script>
 </body>
 </html>

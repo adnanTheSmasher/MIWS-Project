@@ -5,32 +5,22 @@ import os
 import random
 import quizGame
 import webbrowser
+# FIX 1: Do NOT import AI_VirtualPainter — importing it runs the painter immediately!
+# The painter is launched as a subprocess instead.
 
 app = Flask(__name__)
 
-
-
-
-
-
-
-#===============================================
-#   Air Canvas Logic
-#===============================================
-
+# ═══════════════════════════════════════════
+#   Air Canvas — subprocess launcher
+# ═══════════════════════════════════════════
 painter_process = None
 
-# Air Canvas Launcher
 @app.route('/launch-canvas')
 def launch_canvas():
     global painter_process
-
-    # if agr pehle se open hai canvas to destroy kardo
     if painter_process and painter_process.poll() is None:
         painter_process.terminate()
-    
     try:
-        # iske niche wala code isko properly launch karega
         painter_process = subprocess.Popen(
             [sys.executable, 'AI_VirtualPainter.py'],
             cwd=os.path.dirname(os.path.abspath(__file__))
@@ -38,19 +28,21 @@ def launch_canvas():
         return jsonify({'status': 'launched'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
-    
-if __name__ == "__main__":
-    webbrowser.open("http://127.0.0.1:5500/")
-    app.run(debug=False, port=5500, use_reloader=False)
 
-#===============================================
-#   Air Canvas Logic - End
-#===============================================
+@app.route('/canvas/stop')
+def stop_canvas():
+    global painter_process
+    # FIX 2: terminate() kills the subprocess and its cv2 window properly
+    if painter_process and painter_process.poll() is None:
+        painter_process.terminate()
+        painter_process.wait()   # wait for it to fully close
+        painter_process = None
+    return jsonify({'status': 'stopped'})
 
 
-#===============================================
-#   Quiz Game Logic 
-#===============================================
+# ═══════════════════════════════════════════
+#   Quiz Data
+# ═══════════════════════════════════════════
 QUESTIONS = [
     {"category": "Artificial Intelligence", "question": "Which algorithm is inspired by the human brain?",           "options": ["Decision Tree", "Neural Network", "Linear Regression", "K-Means"],                                                        "answer": 1},
     {"category": "Artificial Intelligence", "question": "Which search uses a heuristic to find the shortest path?", "options": ["BFS", "DFS", "A* Search", "Greedy Search"],                                                                               "answer": 2},
@@ -74,28 +66,17 @@ quiz_session = {'questions': [], 'index': 0, 'score': 0, 'done': False}
 
 def reset_quiz():
     q = random.sample(QUESTIONS, min(10, len(QUESTIONS)))
-    quiz_session.update({'questions': q, 'index': 0, 'score':0, 'done': False})
+    quiz_session.update({'questions': q, 'index': 0, 'score': 0, 'done': False})
 
 reset_quiz()
 
-#===============================================
-#   Quiz Game Logic - End
-#===============================================
 
-
-#===============================================
-#   Page Changing logic
-#===============================================
-
-# Home-Page
+# ═══════════════════════════════════════════
+#   Page Routes
+# ═══════════════════════════════════════════
 @app.route('/')
 def home():
-    return render_template("index.html")
-
-@app.route('/canvas')
-def canvas_page():
-    return render_template('canvas.html')
-
+    return render_template('index.html')
 
 @app.route('/quiz')
 def quiz_page():
@@ -103,54 +84,44 @@ def quiz_page():
     reset_quiz()
     return render_template('quiz.html')
 
-#===============================================
-#   Page Changing logic - End
-#===============================================
 
-#===============================================
-#   Quiz Game Logic Gesture Logic
-#===============================================
-
+# ═══════════════════════════════════════════
+#   Quiz API
+# ═══════════════════════════════════════════
 @app.route('/quiz/gesture')
 def get_quiz_gesture():
     return jsonify(quizGame.get_gesture())
 
 @app.route('/quiz/question')
-def get_questions():
+def get_question():
     s = quiz_session
     if s['done'] or s['index'] >= len(s['questions']):
-        return jsonify({'done': True, 'score':s['score'], 'total': len(s['questions'])})
-    q = s["questions"][s['index']]
+        return jsonify({'done': True, 'score': s['score'], 'total': len(s['questions'])})
+    q = s['questions'][s['index']]
     return jsonify({
-         'done':     False,
-        'index':    s['index'],
-        'total':    len(s['questions']),
-        'score':    s['score'],
-        'category': q['category'],
-        'question': q['question'],
-        'options':  q['options']
+        'done': False, 'index': s['index'], 'total': len(s['questions']),
+        'score': s['score'], 'category': q['category'],
+        'question': q['question'], 'options': q['options'],
     })
 
 @app.route('/quiz/answer', methods=['POST'])
 def submit_answer():
-    s = quiz_session
+    s        = quiz_session
     selected = request.get_json().get('answer', -1)
     if s['done'] or s['index'] >= len(s['questions']):
         return jsonify({'done': True, 'score': s['score'], 'total': len(s['questions'])})
-    q = s["questions"][s["index"]]
+    q          = s['questions'][s['index']]
     is_correct = (selected == q['answer'])
     if is_correct:
         s['score'] += 1
     s['index'] += 1
-    done = s['index'] >= len(s["questions"])
+    done = s['index'] >= len(s['questions'])
     if done:
-        s["done"] = True
+        s['done'] = True
     return jsonify({
-        'is_correct': is_correct,
-        'correct':    q['answer'],
-        'score':      s['score'],
-        'done':       done,
-        'total':      len(s['questions']),
+        'is_correct': is_correct, 'correct': q['answer'],
+        'score': s['score'], 'done': done, 'total': len(s['questions']),
+        'index': s['index'],
     })
 
 @app.route('/quiz/restart', methods=['POST'])
@@ -158,11 +129,14 @@ def restart_quiz():
     reset_quiz()
     return jsonify({'status': 'ok'})
 
-#===============================================
-#   Quiz Game Logic Gesture Logic - End
-#===============================================
+@app.route('/quiz/stop')
+def stop_quiz():
+    # FIX 3: This properly stops camera so it's free after leaving quiz page
+    quizGame.stop()
+    return jsonify({'status': 'stopped'})
 
 
-if __name__ == "__main__":
-    #webbrowser.get()
+# ═══════════════════════════════════════════
+if __name__ == '__main__':
+    webbrowser.open('http://127.0.0.1:5500/')
     app.run(debug=False, threaded=True, port=5500)

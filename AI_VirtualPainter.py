@@ -40,8 +40,22 @@ detector = htm.handDetector(detectionCon=0.85, maxHands=1)
 xp, yp = 0, 0
 imgCanvas = None
 
+_running = None
+if cap:
+    _running = True
 
-while True:
+
+def stop():
+    global _running
+    _running = False
+    if cap:
+        cap.release()
+        cap = None
+
+    cv2.destroyAllWindows()
+    print("[Canvas Stoped]")
+
+while _running:
     success, img = cap.read()
     if not success:
         print("Error opeining camera")

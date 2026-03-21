@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Air Canvas · MIWS</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/canvas.css') }}" />
+  <link rel="stylesheet" href="/static/css/canvas.css" />
 </head>
 <body>
 
@@ -65,10 +65,17 @@
         <span class="status-dot" id="statusDot"></span>
         <span id="statusText">Ready to launch</span>
       </div>
-
+      
+      <button class="launch-btn" id="launchBtn" onclick="stopCanvas()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/>
+          <polygon points="7,5.5 13,9 7,12.5" fill="currentColor"/>
+        </svg>
+        Stop Painter
+      </button>
     </div>
   </main>
 
-  <script src="{{ url_for('static', filename='js/canvas.js') }}"></script>
+  <script src="/static/scripts/canvas.js"></script>
 </body>
 </html>
