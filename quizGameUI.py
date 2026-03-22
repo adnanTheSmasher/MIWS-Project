@@ -164,7 +164,7 @@ def MainLoop():
                         _GAME_STATE = "quiz"
                         _currentQuestion = 0
                         _score = 0
-                        _totalQuestions = 0
+                        _totalQuestions = len(QUESTIONS)
 
                     elif right == 2:
                         _running = False
@@ -231,8 +231,8 @@ def MainLoop():
                         if i == q["answer"]:
                             _score += 1
                         _currentQuestion+=1
-                    if _currentQuestion >= len(QUESTIONS):
-                        _GAME_STATE = "results"
+                if _currentQuestion >= len(QUESTIONS):
+                    _GAME_STATE = "results"
         
         elif _GAME_STATE == "results":
             title_text = font_title.render("QUIZ FINISHED", True, WHITE)
@@ -259,7 +259,7 @@ def MainLoop():
                         _GAME_STATE = "quiz"
                         _currentQuestion = 0
                         _score = 0
-                    if right == 2:
+                    elif right == 2:
                         _running = False
                     logic.resetProgress()
 
