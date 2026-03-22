@@ -32,31 +32,31 @@ brushThickness = 5
 eraserThickness = 30
 
 
-cap = cv2.VideoCapture(0)
-cap.set(3, 1280)
-cap.set(4, 800)
+_cap = cv2.VideoCapture(0)
+_cap.set(3, 1280)
+_cap.set(4, 800)
 
 detector = htm.handDetector(detectionCon=0.85, maxHands=1)
 xp, yp = 0, 0
 imgCanvas = None
 
 _running = None
-if cap:
+if _cap:
     _running = True
 
 
 def stop():
-    global _running
+    global _running, _cap
     _running = False
-    if cap:
-        cap.release()
-        cap = None
+    if _cap:
+        _cap.release()
+        _cap = None
 
     cv2.destroyAllWindows()
     print("[Canvas Stoped]")
 
 while _running:
-    success, img = cap.read()
+    success, img = _cap.read()
     if not success:
         print("Error opeining camera")
         break
@@ -126,8 +126,7 @@ while _running:
     cv2.setWindowProperty("Air Canvas - Painter", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
     cv2.imshow("Air Canvas - Painter", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        stop()
         break
 
-cap.release()
-cv2.destroyAllWindows()
 
