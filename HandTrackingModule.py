@@ -74,6 +74,45 @@ class handDetector():
                 fingers.append(0)
 
         return fingers
+    
+    def fingersUpBothHands(self, img):
+        hands_data = {
+            'Left': [], 'Right': []
+        }
+
+        if self.results.multi_hand_landmarks:
+            for handNo, handLms in enumerate(self.results.multi_hand_landmarks):
+                lmList = []
+                #print(f"handNo = {handNo},  handLms = {handLms}")
+                for id, lm in enumerate(handLms.landmark):
+                    h, w, c = img.shape
+                    lmList.append([id, int(lm.x*w), int(lm.y*h)])
+
+                handtype = self.results.multi_handedness[handNo].classification[0].label.strip()
+                fingers = []
+               
+                 # Thumb
+                if handtype == "Right":
+                    if lmList[self.tipIds[0]][1] < lmList[self.tipIds[0] - 1][1]:
+                        fingers.append(1)
+                    else:
+                        fingers.append(0)
+                elif handtype == "Left":    
+                    if lmList[self.tipIds[0]][1] > lmList[self.tipIds[0] - 1][1]:
+                        fingers.append(1)
+                    else:
+                        fingers.append(0)
+
+                # Fingers
+                for id in range(1, 5):
+                    if lmList[self.tipIds[id]][2] < lmList[self.tipIds[id] - 2][2]:
+                        fingers.append(1)
+                    else:
+                        fingers.append(0) 
+                
+                hands_data[handtype] = fingers
+        return hands_data
+
 
     def findDistance(self, p1, p2, img, draw=True, r=15, t=3):
         x1, y1 = self.lmlist[p1][1], self.lmlist[p1][2]
@@ -95,17 +134,18 @@ def main():
     cap = cv2.VideoCapture(0)
     pTime = 0
     cTime = 0
-    detector = handDetector()
+    detector = handDetector(maxHands=2, detectionCon=0.85)
 
     while True:
         success, img = cap.read()
         if not success:
             break
         img = detector.findHands(img)
-        lmlist = detector.findPosition(img)
-        if len(lmlist) != 0:
-            print(lmlist[4])
-
+        lmlist = detector.findPosition(img, draw=False)
+        print(detector.fingersUpBothHands())
+        #if len(lmlist) != 0:
+        #    print(lmlist[4])
+        
         cTime = time.time()
         fps = 1 / (cTime - pTime)
         pTime = cTime
