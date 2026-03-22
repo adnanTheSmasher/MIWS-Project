@@ -3,7 +3,7 @@ import HandTrackingModule as htm
 import time
 
 
-_gesture = {"fingers": -1, "progress": 0} #-1=agr kuch bhi nahi hai, 0=when fist gesture for selection, 1-4-fingers for option
+_gesture = {"fingers_right": -1, "fingers_left": -1, "progress": 0} #-1=agr kuch bhi nahi hai, 0=when fist gesture for selection, 1-4-fingers for option
 _cap = None
 _running = True
 _detector = None
@@ -13,10 +13,10 @@ LEFT = "Left"
 def setup():
     global _cap, _running, _detector
     _cap = cv2.VideoCapture(0)
-    _cap.set(3, 1280)
-    _cap.set(4, 720)
+    _cap.set(3, 600)
+    _cap.set(4, 300)
     _running = True
-    _detector = htm.handDetector(maxHands=1, detectionCon=0.85)
+    _detector = htm.handDetector(maxHands=2, detectionCon=0.85)
 
 def stop():
     global _cap, _running
@@ -28,6 +28,10 @@ def stop():
 
 def getGesture():
     return dict(_gesture)
+
+def resetProgress():
+    global _gesture
+    _gesture["progress"] = 0
 
 def loopForGesture():
     global _cap, _running, _detector, _gesture
@@ -48,19 +52,26 @@ def loopForGesture():
             selected = sum(right_hand)
 
             if 0 < selected < 5 :
-                print("Selected Option: ", selected)
-                _gesture["fingers"] = selected
+                #print("Selected Option: ", selected)
+                _gesture["fingers_right"] = selected
                 _gesture["progress"] = 0
 
         if len(left_hand) == 5: # left hand screen pai hai
-            if sum(left_hand) == 0:
-                 print("confirmed")
-                 _gesture["progress"] += 1
-                 if _gesture["progress"] >= 100:
-                     _gesture["progress"] = 100
+            selected = sum(left_hand)
+            if 0 < selected < 5:
+                 #print("confirmed")
+                if _gesture["fingers_left"] != selected:  # Only reset if changed
+                    _gesture["progress"] = 0
+                _gesture["fingers_left"] = selected 
+            elif selected == 0:
+                _gesture["progress"] += 1
+                if _gesture["progress"] >= 50:
+                    print("confirmed")
+                    _gesture["progress"] = 0
 
-            
 
+        gesture = getGesture()
+        print(gesture)
 
         cv2.imshow("Quiz Gesture Capture", img)
         if cv2.waitKey(1) & 0xFF == ord('q'): 
