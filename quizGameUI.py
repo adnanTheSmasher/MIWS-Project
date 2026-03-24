@@ -42,8 +42,15 @@ class Button:
         self.rect = pygame.Rect(x, y, w, h)
         self.text = text
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, BUTTON_COLOR, self.rect)
+    def draw(self, screen, hover=False):
+        mousePos = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(mousePos) or hover:
+            color = HOVER_BUTTON_COLOR
+        else:
+            color = BUTTON_COLOR
+        
+        pygame.draw.rect(screen, color, self.rect)
 
         text_surface = font_button.render(self.text, True, WHITE)
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -75,7 +82,8 @@ quit_result_btn = Button(540, 550, 200, 60, 'Quit')
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 BUTTON_COLOR = (0, 128, 255)
-GREEN = (0, 0, 255)
+HOVER_BUTTON_COLOR = (0, 200, 255) 
+GREEN = (0, 0, 255), 
 
 WIDTH, HEIGHT = 1280, 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -154,13 +162,15 @@ def MainLoop():
             title_rect = title_text.get_rect(center=(WIDTH // 2, 200))
             screen.blit(title_text, title_rect)
             # Draw buttons
-            start_btn.draw(screen)
-            quit_btn.draw(screen)
+            # start_btn.draw(screen)
+            # quit_btn.draw(screen)
             
             if gesture:
                 print(gesture)
                 right = gesture.get("fingers_right", -1)
                 progress = gesture.get("progress", 0)
+                hover_start = False
+                hover_quit = False
 
                 if progress >= 30:
                     if right == 1:
@@ -174,14 +184,18 @@ def MainLoop():
                     logic.resetProgress()
 
                 if right == 1:
-                    pygame.draw.rect(screen, BLACK, start_btn.rect)
+                    hover_start = True
                 elif right == 2:
-                    pygame.draw.rect(screen, BLACK, quit_btn.rect)
+                    hover_quit = True
+                start_btn.draw(screen, hover_start)
+                quit_btn.draw(screen, hover_quit)
 
     
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     _running = False
+
+
 
                 if start_btn.is_clicked(event):
                     print("Start Game")
@@ -207,10 +221,26 @@ def MainLoop():
                 btn = Button(200, 250 + i*80, 800, 60, option)
                 btn.draw(screen=screen)
                 optionButtons.append(btn)
+                hoverIndex = -1
             
+            hover_index = -1
+
             if gesture:
                 right = gesture.get("fingers_right", -1)
-                progress = gesture.get("progress", 0)
+                progress = gesture.get('progress', 0)
+                hover_index = right - 1
+
+            optionButtons = []
+
+            for i, option in enumerate(q["options"]):
+                btn = Button(200, 250 + i*80, 800, 60, option)
+
+                is_hover = (i == hover_index)
+
+                btn.draw(screen, is_hover)
+                optionButtons.append(btn)
+
+                
 
                 if progress >= 30:
                     selected = right - 1
