@@ -2,6 +2,7 @@ import pygame
 import HandTrackingModule as htm
 import quizGameLogic as logic
 import threading
+import time
 import sys
 
 pygame.init()
@@ -140,6 +141,8 @@ def StartCV2():
 def MainLoop():
     global _running, _gesture, _GAME_STATE, _currentQuestion, _score, _totalQuestions
 
+    clock = pygame.time.Clock()
+
     while _running:
         screen.fill(BLACK)
         gesture = logic.getGesture()
@@ -277,6 +280,7 @@ def MainLoop():
                     _running = False
 
         pygame.display.update()
+        clock.tick(60)
     pygame.quit()
     logic.stop()
 
@@ -286,5 +290,17 @@ def MainLoop():
 
 
 if __name__ == "__main__":
-    StartCV2()
-    MainLoop()
+    try:
+        if not pygame.get_init():
+            pygame.init()
+
+
+        StartCV2()
+        time.sleep(0.5)
+        MainLoop()
+
+    except Exception as e:
+        print("Exception: ", e)
+    finally:
+        logic.stop()
+        pygame.quit()

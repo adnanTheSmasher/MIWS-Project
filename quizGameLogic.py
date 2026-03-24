@@ -35,10 +35,16 @@ def resetProgress():
 
 def loopForGesture():
     global _cap, _running, _detector, _gesture
+    if not _cap or not _cap.isOpened():
+        print("Camera Not initialized....")
+        _running = False
+        return
+    
     while _running:
         success, img = _cap.read()
         if not success:
             print("NOt abelt o open camera")
+            time.sleep(0.1)
             break
         img = cv2.flip(img, 1)
         img = _detector.findHands(img, draw=True)

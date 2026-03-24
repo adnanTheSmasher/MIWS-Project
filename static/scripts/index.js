@@ -32,6 +32,23 @@ function launchCanvas(e) {
     .catch(() => showToast('❌ Could not reach server', 'Make sure Flask is running.'));
 }
 
+// ── Quiz Game — launch Quiz Game directly from home card ──
+function launchQuiz(e) {
+  e.preventDefault();
+  showToast('🖐️ Launching Quiz Game...', 'Quiz window opening on your screen.');
+
+  fetch('/launch-quiz')
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'launched') {
+        showToast('✅ Quiz is running!', 'Press Q on the Quiz window to quit.');
+      } else {
+        showToast('❌ Launch failed', data.message || 'Something went wrong.');
+      }
+    })
+    .catch(() => showToast('❌ Could not reach server', 'Make sure Flask is running.'));
+}
+
 // ── Toast notification ──
 function showToast(title, subtitle) {
   document.querySelector('.toast')?.remove();
