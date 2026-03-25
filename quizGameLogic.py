@@ -48,7 +48,6 @@ def loopForGesture():
             break
         img = cv2.flip(img, 1)
         img = _detector.findHands(img, draw=True)
-        lmList, _ = _detector.findPosition(img, draw=False)
         hands = _detector.fingersUpBothHands(img)
 
         right_hand = hands.get(RIGHT, [])
