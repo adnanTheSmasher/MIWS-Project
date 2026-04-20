@@ -109,7 +109,7 @@ project/
 |
 ├── templates/
 │   └── index.html          # Frontend UI
-├── static/                 # CSS / JS (if any)
+├── static/                 
 │   └── css/
 |       └── canvas.css
 |       └── index.css
@@ -248,6 +248,9 @@ http://127.0.0.1:5000/
 ## 👨‍💻 Author
 
 **Adnan Hatim**
+FAST University – AI Lab Project
+
+**Murtaza Hunaid**
 FAST University – AI Lab Project
 
 ---
