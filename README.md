@@ -249,6 +249,8 @@ http://127.0.0.1:5000/
 
 **Adnan Hatim**
 FAST University – AI Lab Project
+**Murtaza Hunaid**
+FAST University – AI Lab Project
 
 ---
 
