@@ -153,7 +153,7 @@ def MainLoop():
 
     while _running:
         screen.fill(BLACK)
-        gesture = logic.getGesture()
+        _gesture = logic.getGesture()
 
         # =================== MENU =================== 
         if _GAME_STATE == 'menu':
@@ -165,10 +165,10 @@ def MainLoop():
             # start_btn.draw(screen)
             # quit_btn.draw(screen)
             
-            if gesture:
-                print(gesture)
-                right = gesture.get("fingers_right", -1)
-                progress = gesture.get("progress", 0)
+            if _gesture:
+                print(_gesture)
+                right = _gesture.get("fingers_right", -1)
+                progress = _gesture.get("progress", 0)
                 hover_start = False
                 hover_quit = False
 
@@ -225,9 +225,9 @@ def MainLoop():
             
             hover_index = -1
 
-            if gesture:
-                right = gesture.get("fingers_right", -1)
-                progress = gesture.get('progress', 0)
+            if _gesture:
+                right = _gesture.get("fingers_right", -1)
+                progress = _gesture.get('progress', 0)
                 hover_index = right - 1
 
             optionButtons = []
@@ -283,9 +283,9 @@ def MainLoop():
             quit_result_btn.draw(screen)
 
             # Gesture part dalna hai
-            if gesture:
-                right = gesture.get("fingers_right", -1)
-                progress = gesture.get("progress", 0)
+            if _gesture:
+                right = _gesture.get("fingers_right", -1)
+                progress = _gesture.get("progress", 0)
 
                 if progress >= 30:
                     if right == 1:
