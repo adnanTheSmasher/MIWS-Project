@@ -109,7 +109,7 @@ project/
 |
 ├── templates/
 │   └── index.html          # Frontend UI
-├── static/                 # CSS / JS (if any)
+├── static/                 
 │   └── css/
 |       └── canvas.css
 |       └── index.css
