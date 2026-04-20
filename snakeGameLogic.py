@@ -50,11 +50,11 @@ def loopForGesture():
         img = cv2.flip(img, 1)
         img = _detector.findHands(img, draw=True)
         hands = _detector.fingersUpBothHands(img)
-        lmList, _ = _detector.findPosition(img)
+        lmList, _ = _detector.findPosition(img, draw=False)
 
         right_hand = hands.get(RIGHT, [])
         left_hand = hands.get(LEFT, [])
-
+        print(hands)
         if len(right_hand) == 5: # right hand screen pai hai
             selected = sum(right_hand)
 
@@ -64,6 +64,7 @@ def loopForGesture():
                 _gesture["progress"] = 0
                 MRPfingersClosed = right_hand[2] == 0 and right_hand[3]==0 and right_hand[4]==0 # middle, ring and pinkie finger band hogi
                 fist = right_hand[1] == 1 and right_hand[2]==1 and right_hand[3]==1
+
                 new_dir = None
                 if fist:
                     print("Down")

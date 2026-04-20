@@ -218,26 +218,31 @@ def MainLoop():
         elif _GAME_STATE == 'snake':
             if _directions:
                 gesture_dir = _directions.get("direction", -1)
-                snakeGame.update_directions(gesture_dir)
+                
+                # Check if there's an active gesture
+                if gesture_dir != -1:
+                    snakeGame.update_directions(gesture_dir)
+                    # Clear the gesture so it doesn't continuously override the keyboard
+                    logic._gesture["direction"] = -1
             
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     _running = False
-
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        print("W pressed...")
                         snakeGame.update_directions(1)
-                    if event.key == pygame.K_LEFT:
-                        print("A pressed...")
+                        print("Go up...")
+                    elif event.key == pygame.K_LEFT:
                         snakeGame.update_directions(4)
-                    if event.key == pygame.K_DOWN:
-                        print("S pressed...")
+                        print("Go Left...")
+                    elif event.key == pygame.K_DOWN:
                         snakeGame.update_directions(3)
-                    if event.key == pygame.K_RIGHT:
-                        print("D pressed...")
+                        print("Go Down...")
+                    elif event.key == pygame.K_RIGHT:
                         snakeGame.update_directions(2)
+                        print("Go Right...")
+            
 
             currentTime = time.time()
             if currentTime - last_move_time > move_delay:

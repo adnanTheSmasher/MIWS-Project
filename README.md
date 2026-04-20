@@ -173,15 +173,14 @@ http://127.0.0.1:5000/
 | ------------ | ----------------- |
 | ☝️ 1 Finger  | Select / Start    |
 | ✌️ 2 Fingers | Quit / Exit       |
-| Hold gesture | Confirm selection |
+| ✊ Hold gesture | Confirm selection |
 
 ---
 
 ### 🐍 Snake Game
 
 * Control snake using hand gestures:
-
-  * Up / Down / Left / Right
+  * ☝ Up / ✊ Down / 👈 Left / 👉 Right
 * No walls → snake wraps around screen
 * Eat food to increase score
 * Avoid hitting yourself
@@ -199,12 +198,12 @@ http://127.0.0.1:5000/
 
 ### 🎨 Air Canvas
 
-* Draw in air using your finger
+* Draw in air using your index finger
 * Use gestures to:
 
-  * Draw
-  * Change color
-  * Erase
+  * 👆 Draw
+  * ✌️ Change color
+  * ✌️ Erase
 
 ---
 
