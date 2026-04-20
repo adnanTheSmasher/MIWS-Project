@@ -6,33 +6,45 @@ import webbrowser
 
 app = Flask(__name__)
 
+processes = {}
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def run_script(name, script):
+    global processes
+
+    if name in processes and processes[name].poll() is None:
+        processes[name].terminate()
+        processes[name].wait()
+
+    processes[name] = subprocess.Popen(
+        [sys.executable, script],
+        cwd=BASE_DIR,
+        creationflags=subprocess.CREATE_NEW_CONSOLE
+    )
+
 # ═══════════════════════════════════════════
-#   Air Canvas — ye sirf cv2 ki window ko show karega nothing else as a subprocess in the background
+#   Air Canvas — ye sirf cv2 ki window ko show karega nothing else, as a subprocess in the background
 # ═══════════════════════════════════════════
-painter_process = None
 
 @app.route('/launch-canvas')
 def launch_canvas():
-    global painter_process
-    if painter_process and painter_process.poll() is None:
-        painter_process.terminate()
     try:
-        painter_process = subprocess.Popen(
-            [sys.executable, 'AI_VirtualPainter.py'],
-            cwd=os.path.dirname(os.path.abspath(__file__))
-        )
+        run_script('canvas', 'AI_VirtualPainter.py')
         return jsonify({'status': 'launched'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-@app.route('/canvas/stop')
-def stop_canvas():
-    global painter_process
-    if painter_process and painter_process.poll() is None:
-        painter_process.terminate()
-        painter_process.wait()
-        painter_process = None
-    return jsonify({'status': 'stopped'})
+
+# ═══════════════════════════════════════════
+#   Snake Game — ye sirf SnakeGameUI wali python ki script run karega
+# ═══════════════════════════════════════════
+@app.route('/launch-game')
+def launch_snakeGame():
+    try:
+        run_script('snake', 'snakeGameUI.py')
+        return jsonify({"status": "launched"})
+    except Exception as e:
+        return jsonify({"status": 'Error', "message": str(e)}, 500)
 
 
 # ═══════════════════════════════════════════
@@ -40,27 +52,11 @@ def stop_canvas():
 # ═══════════════════════════════════════════
 @app.route('/launch-quiz')
 def launch_quiz():
-    global painter_process
-    if painter_process and painter_process.poll() is None:
-        painter_process.terminate()
-        painter_process.wait()
     try:
-        painter_process = subprocess.Popen(
-            [sys.executable, 'quizGameUI.py'],
-            cwd=os.path.dirname(os.path.abspath(__file__))
-        )
+        run_script('quiz', 'quizGameUI.py')
         return jsonify({'status': 'launched'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}, 500)
-
-@app.route('/quiz/stop')
-def stop_quiz():
-    global painter_process
-    if painter_process and painter_process.poll() is None:
-        painter_process.terminate()
-        painter_process.wait()
-        painter_process = None
-    return jsonify({'status': 'stopped'})
 
 # ═══════════════════════════════════════════
 #   Page Routes

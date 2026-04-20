@@ -140,9 +140,10 @@ def main():
         success, img = cap.read()
         if not success:
             break
+        img = cv2.flip(img, 1)
         img = detector.findHands(img)
         lmlist = detector.findPosition(img, draw=False)
-        print(detector.fingersUpBothHands())
+        print(detector.fingersUpBothHands(img))
         #if len(lmlist) != 0:
         #    print(lmlist[4])
         

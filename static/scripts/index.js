@@ -15,7 +15,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// ── Air Canvas — launch painter directly from home card ──
+// ── Air Canvas — launch painter ──
 function launchCanvas(e) {
   e.preventDefault();
   showToast('🖐️ Launching Air Canvas...', 'Painter window opening on your screen.');
@@ -32,7 +32,24 @@ function launchCanvas(e) {
     .catch(() => showToast('❌ Could not reach server', 'Make sure Flask is running.'));
 }
 
-// ── Quiz Game — launch Quiz Game directly from home card ──
+// ── Snake Game Launcher— launch Game ──
+function launchSnakeGame(e) {
+  e.preventDefault();
+  showToast('🐍 Launching Snake Game...', 'Game window opening on your screen.');
+
+  fetch('/launch-game')
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'launched') {
+        showToast('✅ Game is running!', 'Press Q on the Game window to quit.');
+      } else {
+        showToast('❌ Launch failed', data.message || 'Something went wrong.');
+      }
+    })
+    .catch(() => showToast('❌ Could not reach server', 'Make sure Flask is running.'));
+}
+
+// ── Quiz Game — launch Quiz Game ──
 function launchQuiz(e) {
   e.preventDefault();
   showToast('🖐️ Launching Quiz Game...', 'Quiz window opening on your screen.');

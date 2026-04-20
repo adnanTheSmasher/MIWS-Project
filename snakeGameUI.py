@@ -2,6 +2,7 @@ import pygame
 import HandTrackingModule as htm
 import snakeGameLogic as logic
 import threading
+import random
 import time
 import sys
 
@@ -72,6 +73,69 @@ quit_result_btn = Button(540, 550, 200, 60, 'Quit')
 # BUTTONS - END
 # ========================================================
 
+# ========================================================
+# Snake Game Class
+# ========================================================
+CELL_SIZE = 20
+
+class SnakeGame:
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.snake = [(WIDTH//2, HEIGHT//2)]
+        self.direction = (CELL_SIZE, 0)
+        self.food = self.spawnFood()
+        self.score = 0
+
+    def spawnFood(self):
+        x = random.randrange(0, WIDTH, CELL_SIZE)
+        y = random.randrange(0, HEIGHT, CELL_SIZE)
+        return (x, y)
+    
+    def update_directions(self, gesture_dir):
+        # gesture_dir: 1=up,2=right,3=down,4=left
+        if gesture_dir == 1 and self.direction != (0, CELL_SIZE):
+            self.direction = (0, -CELL_SIZE)
+        elif gesture_dir == 2 and self.direction != (-CELL_SIZE, 0):
+            self.direction = (CELL_SIZE, 0)
+        elif gesture_dir == 3 and self.direction != (0, -CELL_SIZE):
+            self.direction = (0, CELL_SIZE)
+        elif gesture_dir == 4 and self.direction != (CELL_SIZE, 0):
+            self.direction = (-CELL_SIZE, 0)
+
+    def move(self):
+        head_x, head_Y = self.snake[0]
+        dx, dy = self.direction
+
+        new_head = ((head_x+dx)%WIDTH, (head_Y+dy)%HEIGHT)
+
+        if new_head in self.snake: # apne app k sath takkar hogai to out
+            self.reset()        
+            return
+        
+        self.snake.insert(0, new_head)
+
+        if new_head == self.food:
+            self.score += 1
+            self.food = self.spawnFood()
+        else:
+            self.snake.pop()
+    
+    def draw(self, screen):
+        for bodyPart in self.snake:
+            pygame.draw.rect(screen, WHITE, (*bodyPart, CELL_SIZE, CELL_SIZE))
+
+        pygame.draw.rect(screen, (255, 0, 0), (*self.food, CELL_SIZE, CELL_SIZE))
+
+        score_text = font_button.render(f"SCORE: {self.score}", True, WHITE)
+        rect = score_text.get_rect(center=(WIDTH//2, 30))
+        screen.blit(score_text, rect)
+    
+
+# ========================================================
+# Snake Game Class - END
+# ========================================================
 
 # ========================================================
 # PYGAME VARIABLES
@@ -90,6 +154,9 @@ pygame.display.set_caption("Snake Game")
 
 font_title = pygame.font.SysFont("Arial", 60)
 
+snakeGame = SnakeGame()
+move_delay = 0.12
+last_move_time = time.time()
 # ========================================================
 # PYGAME VARIABLES - END
 # ========================================================
@@ -101,7 +168,7 @@ def StartCV2():
     _gesture_thread.start()
 
 def MainLoop():
-    global _running, _directions, _GAME_STATE, _currentQuestion, _score
+    global _running, _directions, _GAME_STATE, _currentQuestion, _score, last_move_time
     clock = pygame.time.Clock()
 
     while _running:
@@ -116,7 +183,7 @@ def MainLoop():
             hover_quit = False
             
             if _directions:
-                print(_directions)
+                #print(_directions)
                 right = _directions.get("fingers_right", -1)
                 progress = _directions.get("progress", 0)
 
@@ -147,7 +214,37 @@ def MainLoop():
                     _score = 0
                 if quit_btn.is_clicked(event):
                     _running = False
+        
+        elif _GAME_STATE == 'snake':
+            if _directions:
+                gesture_dir = _directions.get("direction", -1)
+                snakeGame.update_directions(gesture_dir)
+            
 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    _running = False
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        print("W pressed...")
+                        snakeGame.update_directions(1)
+                    if event.key == pygame.K_LEFT:
+                        print("A pressed...")
+                        snakeGame.update_directions(4)
+                    if event.key == pygame.K_DOWN:
+                        print("S pressed...")
+                        snakeGame.update_directions(3)
+                    if event.key == pygame.K_RIGHT:
+                        print("D pressed...")
+                        snakeGame.update_directions(2)
+
+            currentTime = time.time()
+            if currentTime - last_move_time > move_delay:
+                snakeGame.move()
+                last_move_time = currentTime
+
+            snakeGame.draw(screen)
         pygame.display.update()
         clock.tick(60)
     pygame.quit()

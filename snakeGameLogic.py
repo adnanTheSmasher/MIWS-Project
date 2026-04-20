@@ -63,13 +63,13 @@ def loopForGesture():
                 _gesture["fingers_right"] = selected
                 _gesture["progress"] = 0
                 MRPfingersClosed = right_hand[2] == 0 and right_hand[3]==0 and right_hand[4]==0 # middle, ring and pinkie finger band hogi
-                fist = right_hand[2] == 0 and right_hand[3]==0 and right_hand[4]==0 and right_hand[0]==0 and right_hand[1]==0
+                fist = right_hand[1] == 1 and right_hand[2]==1 and right_hand[3]==1
                 new_dir = None
                 if fist:
                     print("Down")
                     new_dir = 3
 
-                elif MRPfingersClosed:
+                if MRPfingersClosed:
                     x_tip, y_tip = lmList[8][1], lmList[8][2]
                     x_base, y_base = lmList[6][1], lmList[6][2]
 
@@ -120,7 +120,7 @@ def loopForGesture():
 
 
         gesture = getDirections()
-        print(gesture)
+        #print(gesture)
 
         cv2.imshow("Snake Gesture Capture", img)
         if cv2.waitKey(1) & 0xFF == ord('q'): 

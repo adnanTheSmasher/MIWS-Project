@@ -14,7 +14,7 @@ pygame.init()
 _running = True
 _gesture = None
 _gesture_thread = None
-
+_answer_selected = None
 
 # ========================================================
 # GLOBAL VARIABLE - END
@@ -147,7 +147,7 @@ def StartCV2():
 # ========================================================
 
 def MainLoop():
-    global _running, _gesture, _GAME_STATE, _currentQuestion, _score, _totalQuestions
+    global _answer_selected, _running, _gesture, _GAME_STATE, _currentQuestion, _score, _totalQuestions
 
     clock = pygame.time.Clock()
 
@@ -209,6 +209,7 @@ def MainLoop():
                     #logic.stop()
 
         elif _GAME_STATE == 'quiz':
+            _answer_selected = False
             q = QUESTIONS[_currentQuestion]
 
             #Questions
@@ -216,32 +217,27 @@ def MainLoop():
             screen.blit(questionText, (100, 100))
 
             optionButtons = []
-
-            for i, option in enumerate(q["options"]):
-                btn = Button(200, 250 + i*80, 800, 60, option)
-                btn.draw(screen=screen)
-                optionButtons.append(btn)
-                hoverIndex = -1
-            
             hover_index = -1
+            right = -1
+            progress = 0
 
             if _gesture:
                 right = _gesture.get("fingers_right", -1)
                 progress = _gesture.get('progress', 0)
                 hover_index = right - 1
 
-            optionButtons = []
-
             for i, option in enumerate(q["options"]):
                 btn = Button(200, 250 + i*80, 800, 60, option)
-
-                is_hover = (i == hover_index)
-
-                btn.draw(screen, is_hover)
+                btn.draw(screen=screen)
                 optionButtons.append(btn)
 
-                
+            for i, option in enumerate(q["options"]): 
+                btn = Button(200, 250 + i*80, 800, 60, option) 
+                is_hover = (i == hover_index) 
+                btn.draw(screen, is_hover) 
+                optionButtons.append(btn)
 
+            if _gesture and not _answer_selected:
                 if progress >= 30:
                     selected = right - 1
 
@@ -250,9 +246,13 @@ def MainLoop():
                             _score += 1
 
                         _currentQuestion += 1
+                        _answer_selected = True
 
                         if _currentQuestion >= len(QUESTIONS):
                             _GAME_STATE = "results"
+                        else: 
+                            _answer_selected = False
+                            
                     logic.resetProgress() 
 
             for event in pygame.event.get():
@@ -260,12 +260,15 @@ def MainLoop():
                     _running = False
                 
                 for i, btn in enumerate(optionButtons):
-                    if btn.is_clicked(event):
+                    if btn.is_clicked(event) and not _answer_selected:
                         if i == q["answer"]:
                             _score += 1
                         _currentQuestion+=1
+                        _answer_selected = True
                 if _currentQuestion >= len(QUESTIONS):
                     _GAME_STATE = "results"
+                else:
+                    _answer_selected = False
         
         elif _GAME_STATE == "results":
             title_text = font_title.render("QUIZ FINISHED", True, WHITE)
@@ -277,15 +280,15 @@ def MainLoop():
             score_rect = score_text.get_rect(center=(WIDTH//2, 250))
             screen.blit(score_text, score_rect)
 
-            
-            # Draw Button 
-            play_again_btn.draw(screen=screen)
-            quit_result_btn.draw(screen)
-
+            right = -1
+            hover_quit = False
+            hover_start = False
             # Gesture part dalna hai
             if _gesture:
                 right = _gesture.get("fingers_right", -1)
                 progress = _gesture.get("progress", 0)
+                hover_start = False
+                hover_quit = False
 
                 if progress >= 30:
                     if right == 1:
@@ -295,6 +298,14 @@ def MainLoop():
                     elif right == 2:
                         _running = False
                     logic.resetProgress()
+            if right == 1:
+                hover_start = True
+            elif right == 2:
+                hover_quit = True
+
+            # Draw Button 
+            play_again_btn.draw(screen, hover_start)
+            quit_result_btn.draw(screen, hover_quit)
 
             # mouse Part
             for event in pygame.event.get():
@@ -302,6 +313,7 @@ def MainLoop():
                     _running = False
                 if play_again_btn.is_clicked(event=event):
                     print("Play Again...")
+                    _answer_selected = False
                     _GAME_STATE = "quiz"
                     _currentQuestion = 0
                     _score = 0
