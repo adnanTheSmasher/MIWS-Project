@@ -41,7 +41,7 @@ def launch_canvas():
 @app.route('/launch-game')
 def launch_snakeGame():
     try:
-        run_script('snake', 'snakeGameUI.py')
+        run_script('snake', 'snakeGameAIUI.py')
         return jsonify({"status": "launched"})
     except Exception as e:
         return jsonify({"status": 'Error', "message": str(e)}, 500)
