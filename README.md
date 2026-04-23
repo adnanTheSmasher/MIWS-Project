@@ -4,24 +4,27 @@ MediaPipe Interactive Web Suite Project For AI Lab
 
 ## 📌 Overview
 
-This project is a **gesture-controlled interactive system** built using **Python, OpenCV, and Pygame**, integrated with a **Flask web interface**.
+This project is a **gesture-controlled interactive system** built using **Python, OpenCV, Pygame and Machine Learning**, integrated with a **Flask web interface**.
 
-Users can control applications using **hand gestures** detected via webcam. The system includes:
+Users can control applications using **hand gestures detected via webcam** ,with an upgraded **ML-based gesture recognition system** for improved accuracy and flexibility 
+
+The system includes:
 
 * 🎨 Air Canvas (virtual drawing using hand tracking)
-* 🐍 Snake Game (gesture-controlled)
+* 🐍 Snake Game (ML-based gesture-controlled)
 * 🧠 Quiz Game (gesture-based selection)
 
 ---
 
 ## 🚀 Features
 
-* ✋ Real-time hand gesture recognition using OpenCV
-* 🧠 AI-based interaction (via MediaPipe hand tracking)
+* ✋ Real-time hand gesture recognition using OpenCV & MediaPipe
+* 🧠 Machine Learning-based gesture classification (Random Forest)
 * 🎮 Multiple applications in one platform
 * 🌐 Web dashboard using Flask
 * 🔄 Subprocess-based app launching
 * 📷 Webcam integration
+* ⚡ Smooth real-time interaction with gesture stabilization
 
 ---
 
@@ -34,6 +37,7 @@ Users can control applications using **hand gestures** detected via webcam. The 
 * MediaPipe (Hand Tracking framework)
 * Pygame (Game development)
 * Flask (Web framework)
+* Scikit-learn (Machine Learning)
 * Threading & Subprocess (Parallel execution)
 
 ---
@@ -47,6 +51,24 @@ This project applies multiple **Artificial Intelligence and Computer Vision conc
 * Real-time hand landmark detection using **MediaPipe**
 * Extraction of 21 key points (fingers, joints, palm)
 * Tracking hand movement across frames
+
+#### 🧠 Machine Learning-Based Gesture Recognition
+* Custom dataset created using hand landmark coordinates
+* Data stored in CSV format
+* Trained using Random Forest Classifier (Scikit-learn)
+* Model saved & loaded using Joblib
+
+#### 📊 ML Pipeline:
+* Capture hand landmarks
+* Normalize coordinates (relative to wrist)
+* Store dataset (CSV)
+* Train model using Random Forest
+* Predict gestures in real-time
+
+#### 🎯 Supported Gestures:
+* UP / DOWN / LEFT / RIGHT
+* SELECT / PAUSE
+* OPTION 1 / OPTION 2
 
 #### 🧠 Gesture Recognition
 
@@ -62,18 +84,21 @@ This project applies multiple **Artificial Intelligence and Computer Vision conc
 
 #### 📊 Pattern Recognition
 
-* Recognizing finger patterns (0-4 fingers)
+* Recognizing finger patterns (0-4 fingers) and Learned gesture patterns using ML instead of fixed rules
 * Translating patterns into game actions
+* Improved flexibility and accuracy
+* Robust against small variations in hand position
 * Decision-making based on gesture input
 
 #### ⏱️ Real-Time Processing
 
 * Continuous frame processing loop
 * Low-latency interaction system
+* Gesture smoothing using stability checks
 * Synchronization between gesture detection and game logic
 
 #### 🔄 Human-Computer Interaction (HCI)
-
+* Touchless interaction system
 * Gesture-based input instead of keyboard/mouse
 * Natural user interface (NUI)
 * Interactive feedback system (hover, selection, confirmation)
@@ -82,9 +107,10 @@ This project applies multiple **Artificial Intelligence and Computer Vision conc
 
 ### 🎯 AI Application in This Project
 
-* Replacing traditional input devices with **gesture-based control**
-* Creating an **intelligent interaction system**
-* Enabling **touchless gaming and drawing environment**
+* Replacing keyboard/mouse with ML-based gesture control
+* Building an intelligent interactive system
+* Creating a touchless gaming & drawing environment
+* Demonstrating real-world ML + CV integration
 
 
 ## 📂 Project Structure
@@ -100,7 +126,8 @@ project/
 ├── quizGameLogic.py        # Quiz Logic
 ├── HandTrackingModule.py   # Gesture Detection
 ├── requirements.txt
-|
+├── snakeGameAIUI.py          # Snake Game UI
+├── snakeGameAILogic.py       # Snake Game Logic
 ├── images/
 │   └── 1.png
 │   └── 2.png
@@ -183,7 +210,9 @@ http://127.0.0.1:5000/
   * ☝ Up / ✊ Down / 👈 Left / 👉 Right
 * No walls → snake wraps around screen
 * Eat food to increase score
+* PAUSE gesture returns to menu
 * Avoid hitting yourself
+* Avoid self-collision
 
 ---
 
