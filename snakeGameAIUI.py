@@ -172,6 +172,7 @@ def StartCV2():
 
 def MainLoop():
     global _running, _directions, _GAME_STATE, _currentQuestion, _score, last_move_time
+    last_gesture = None
     clock = pygame.time.Clock()
     time.sleep(2)
 
@@ -223,14 +224,10 @@ def MainLoop():
                     _running = False
         
         elif _GAME_STATE == 'snake':
-            if _directions != -1:
-                gesture_dir = _directions
-                
-                # Check if there's an active gesture
-                if gesture_dir != -1:
-                    snakeGame.update_directions(gesture_dir)
-                    # Clear the gesture so it doesn't continuously override the keyboard
-            
+            if _directions != -1 and _directions != last_gesture:
+                snakeGame.update_directions(_directions)
+                last_gesture = _directions
+            # Clear the gesture so it doesn't continuously override the keyboard
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

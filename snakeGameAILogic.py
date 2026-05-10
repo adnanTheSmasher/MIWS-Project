@@ -159,21 +159,21 @@ def loop():
         # COLLECT MODE
         # =======================
         if MODE == "collect" and lmList:
-            if key == ord('u'):
+            if key == ord('w'):
                 save_to_csv("UP", lmList)
-            elif key == ord('d'):
+            elif key == ord('s'):
                 save_to_csv("DOWN", lmList)
-            elif key == ord('l'):
+            elif key == ord('a'):
                 save_to_csv("LEFT", lmList)
-            elif key == ord('r'):
+            elif key == ord('d'):
                 save_to_csv("RIGHT", lmList)
             elif key == ord("z"):
                 save_to_csv("SELECT", lmList)
-            elif key == ord("o"):
-                save_to_csv("PAUSE", lmList)
             elif key == ord("x"):
+                save_to_csv("PAUSE", lmList)
+            elif key == ord("c"):
                 save_to_csv("OPTION 1", lmList)
-            elif key == ord("e"):
+            elif key == ord("v"):
                 save_to_csv("OPTION 2", lmList)
 
             elif key == ord('t'):
